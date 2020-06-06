@@ -1,59 +1,44 @@
-window.onload = loadDoc;
+window.onload = loadDoc("http://sandbox.bittsdevelopment.com/code1/fetchemployees.php",createEmpCard );
 
-function loadDoc(){
+function loadDoc(url, cFunction){
   var xhttp = new XMLHttpRequest();
-  
-  
   xhttp.onreadystatechange = function() {
-  	
-	  var data = this.responseText;
-	    if (this.readyState == 4 && this.status == 200) {
-			document.getElementById("op").innerHTML = data;	      
+  	  if (this.readyState == 4 && this.status == 200) {
+			 cFunction(this);
 	    }
 	  };
 
-  xhttp.open("GET", "http://sandbox.bittsdevelopment.com/code1/fetchemployees.php", true);  
+  xhttp.open("GET", url , true);  
   xhttp.send();
 }
 
+
 function createEmpCard(dataObj){
+	var result = document.getElementById('flex-container');
+	var id = dataObj.employeeid;
+	var fname = dataObj.employeefname;
+	var lname = dataObj.employeelname;
+	var bio = dataObj.employeebio;
+	var roles = dataObj.roles;
+	var pro_pic = "";
+	if (dataObj.employeehaspic == 1){
+		pro_pic = "http://sandbox.bittsdevelopment.com/code1/employeepics/"+id+".jpg";
+	} 
 
-var result = document.getElementById('main');
-var fname = dataObj.employeefname;
-var lname = dataObj.employeelname;
-var bio = dataObj.employeebio;
-console.log(dataObj);
-// var crown = document.getElementById('feat_crown');
-
-// if(dataObj.employeeisfeatured == 1){
-// 	console.log("Emp is featured!");
-// 	feat_crown.style.display = block;
-// }
-// // var feat = dataObj.employeeisfeatured;
-// var roles = dataObj.roles;
-var empImage = "";
-if(dataObj.employeehaspic == 1){
-	console.log("Profile Pic found!");
-	empImage = "http://sandbox.bittsdevelopment.com/code1/employeepics/" +dataObj.employeeid+".jpg";
-}
-
-card = document.getElementById('flex-container');
-
-card.innerHTML += "<div class='card-container' id='main'>";
-card.innerHTML += "<div class='feature'>";
-card.innerHTML += "<img class='icon' src='crown.png' />";  
-card.innerHTML += "</div>";
-card.innerHTML += "<div class='img-circle'>";
-card.innerHTML += "<img src='"+empImage+"' alt='team' style='width:100%;border-radius:50%;'>";
-card.innerHTML += "</div>";
-card.innerHTML += "<div class='container'>";
-card.innerHTML += "<h4 class='center' id='fname'><b>"+fname+"</b><span id='lname'>"+lname+"</span></h4>";
-card.innerHTML += "<p class='bio'>"+bio+"</p>";
-card.innerHTML += "</div>";
-card.innerHTML += "<div class='roles'>";
-//card.innerHTML += "
-card.innerHTML += "</div>";
-card.innerHTML += "</div>";	
-	//dataObj.employeefname will give gary
+	var empCard = "<div class='card-container' id='empCard'>";
+	empCard.innerHTML += "<div class='feature' id='crown-"+id+"'>";
+	empCard.innerHTML += "<img class='icon' src='crown.png' />";  
+	empCard.innerHTML += "</div>";
+	empCard.innerHTML += "<div class='img-circle'>";
+	empCard.innerHTML += "<img src='"+pro_pic+"' alt='team'>";
+	empCard.innerHTML += "</div>";
+	empCard.innerHTML += "<div class='container'>";
+	empCard.innerHTML += "<span class='center'>"+fname+" "+lname+"</span>";
+	empCard.innerHTML += "<p class='bio'>"+bio+"</p>";
+	empCard.innerHTML += "</div>";
+	empCard.innerHTML += "<div class='roles' id='role"+dataObj.employeeid+"'>";
+	empCard.innerHTML += "</div>";
+	empCard.innerHTML += "</div>";
+	result.innerHTML += empCard;
 
 }
