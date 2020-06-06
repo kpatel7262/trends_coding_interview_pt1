@@ -2,17 +2,17 @@ window.onload = loadDoc;
 
 function loadDoc(){
   var xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "http://sandbox.bittsdevelopment.com/code1/fetchemployees.php", true);  
+  
   
   xhttp.onreadystatechange = function() {
   	
 	  var data = this.responseText;
 	    if (this.readyState == 4 && this.status == 200) {
-	      //call makelist function
-	      console.log(Object.values(data).map(createEmpCard));
+			document.getElementById("op").innerHTML = data;	      
 	    }
 	  };
 
+  xhttp.open("GET", "http://sandbox.bittsdevelopment.com/code1/fetchemployees.php", true);  
   xhttp.send();
 }
 
